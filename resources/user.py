@@ -148,3 +148,13 @@ class DeleteUserPost(Resource):
         except:
             return {"message" : "An error occurred while deleting."}, 500
         return {"message" : "Deleted successfully."}, 200
+
+class FindBlogs(Resource):
+    def get(self):
+        parser=reqparse.RequestParser()
+        parser.add_argument('sno',type=str,required=True,help="please give sno")
+        data=parser.parse_args()
+        try:
+            return query(f"""SELECT * FROM blogs WHERE sno='{data['sno']}'""")
+        except:
+            return {"message":"There was an error displaying the data"},500
