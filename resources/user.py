@@ -25,14 +25,14 @@ class UserRegister(Resource):
             return {"message":"Error inserting into Users"},500
 
         try:
-            query(f"""INSERT INTO users (rollno,name,signup_date,lastlogin_date,password) VALUES (
+            query(f"""INSERT INTO coscproj.users (rollno,name,signup_date,lastlogin_date,password) VALUES (
                                                                                                     '{data['rollno']}',
                                                                                                     '{data['name']}',
                                                                                                     '{datetime.now().replace(microsecond=0, second=0, minute=0) - timedelta(hours=1)}',
                                                                                                     '{datetime.now().replace(microsecond=0, second=0, minute=0) - timedelta(hours=1)}',
                                                                                                     '{data['password']}'
                                                                                                     )"""
-                                                                                                    )
+                                                                                                )
         except:
             return {"message":"Error inserting into USERS"},500
 
@@ -113,6 +113,30 @@ class InsertBlogs(Resource):
             return {"message":"Error inserting into Blogs"},500
 
         return {"message":"Blog inserted successfully"},201
+
+class EditBlogs(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('sno',type=str,required=True,help="sno cannot be left blank!")
+        parser.add_argument('post_date', type = str, required = False, help = 'signup_date cannot be left blank')
+        parser.add_argument('post_title', type = str, required = True, help = 'post_title cannot be left blank')
+        parser.add_argument('post_content', type = str, required = True, help = ' post_content cannot be left blank')
+        parser.add_argument('reported_users', type = str, required = False, help = '')
+
+        data = parser.parse_args()
+
+        try:
+            x=query(f"""SELECT * FROM blogs WHERE sno = '{data["sno"]}'""",return_json=False)
+            if len(x)>0:
+                query(f"""UPDATE blogs SET
+                                                post_date='{datetime.now().replace(microsecond=0, second=0, minute=0) - timedelta(hours=1)}',
+                                                post_title='{data['post_title']}',
+                                                post_content='{data['post_content']}'
+                        WHERE sno = '{data["sno"]}'""")
+                return {"message" : "Details are edited successfully!"},200
+            return {"message" : "Srollno doesn't exist"},400
+        except:
+                return{"message" : "Error in editing details"},500
 
 class SearchBlog(Resource):
     def get(self):
