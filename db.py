@@ -3,10 +3,10 @@ from decimal import Decimal
 import pymysql
 
 def query(querystr, return_json=True):
-    connection = pymysql.connect(   host = 'localhost',
-                                    user = 'root',
-                                    password = 'sagnikroy',
-                                    db = 'team9',
+    connection = pymysql.connect(   host = 'skillup-team-09.cxgok3weok8n.ap-south-1.rds.amazonaws.com',
+                                    user = 'admin',
+                                    password = 'coscskillup',
+                                    db = 'coscproj',
                                     cursorclass = pymysql.cursors.DictCursor)
     connection.begin()
     cursor = connection.cursor()

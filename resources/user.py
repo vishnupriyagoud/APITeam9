@@ -18,14 +18,14 @@ class UserRegister(Resource):
         data = parser.parse_args()
 
         try:
-            isAlreadyPresent = query(f"""SELECT * FROM USERS WHERE rollno = '{data['rollno']}'""", return_json = False)
+            isAlreadyPresent = query(f"""SELECT * FROM users WHERE rollno = '{data['rollno']}'""", return_json = False)
             if len(isAlreadyPresent) > 0:
                 return {"message":"Student with given roll no already exists"},400
         except:
             return {"message":"Error inserting into Users"},500
 
         try:
-            query(f"""INSERT INTO Users (rollno,name,signup_date,lastlogin_date,password) VALUES (
+            query(f"""INSERT INTO users (rollno,name,signup_date,lastlogin_date,password) VALUES (
                                                                                                     '{data['rollno']}',
                                                                                                     '{data['name']}',
                                                                                                     '{datetime.now().replace(microsecond=0, second=0, minute=0) - timedelta(hours=1)}',
@@ -86,14 +86,14 @@ class InsertBlogs(Resource):
         data = parser.parse_args()
 
         try:
-            NotPresent = query(f"""SELECT * FROM USERS WHERE name = '{data['name']}'""", return_json = False)
+            NotPresent = query(f"""SELECT * FROM users WHERE name = '{data['name']}'""", return_json = False)
             if len(NotPresent) == 0:
                 return {"message":"Student with given name does not exist in main table"},400
         except:
             return {"message":"Error inserting the blogs"},500
 
         try:
-            NotPresent = query(f"""SELECT * FROM USERS WHERE rollno = '{data['rollno']}'""", return_json = False)
+            NotPresent = query(f"""SELECT * FROM users WHERE rollno = '{data['rollno']}'""", return_json = False)
             if len(NotPresent) == 0:
                 return {"message":"Student with given rollno does not exist in main table"},400
         except:
